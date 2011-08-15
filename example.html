@@ -1,0 +1,20 @@
+<!-- Include jQuery -->
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js'></script>
+<!-- Include the Shelby Player -->
+<script type='text/javascript' src='shelby-player.js'></script>
+
+<!-- Here's where your shelby player will be -->
+<div id="player-div" style="width:900px;height:500px"></div>
+
+<script type='text/javascript'>
+  jQuery(document).ready(function(){
+
+    // Instantiate a ShelbyPlayer and pass in the selector string of the containing div element
+    // and the root uri of the shelby app you want to iFrame (this will default to alpha.shelby.tv)
+    var player = new ShelbyPlayer('#player-div', 'http://localhost:3000');
+
+    // Play a broadcast by passing channelId and broadcastId 
+    player.playBroadcast('4d9390098ebcf62f7e000009', '4d9390138ebcf670c00006ca');
+
+  });
+</script>
