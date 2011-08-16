@@ -10,18 +10,23 @@
  * @param renderOptions : object : (optional) a map of rendering options for the player 
  */
 
-var ShelbyPlayer = function(containerDiv, onStateChange, renderOptions){
+var ShelbyPlayer = function(containerDiv, onReady, onStateChange, renderOptions){
   this.validRenderOptions = ['sidebar', 'shade'];
-  this.rootUri = 'http://localhost:3000';
+  this.rootUri = 'http://localhost:3000/';
   this.iframe = $('<iframe id="shelby-iframe" style="width:100%;height:100%"></iframe>')[0];
-  this.onStateChange = onStateChange;
+  window.addEventListener("message", function(event){
+    data = JSON.parse(event.data);
+    if (data.loaded) {
+      onReady();
+    }
+    onStateChange(event.data);
+  }, false);
   this.renderOptions = renderOptions;
   jQuery(containerDiv).append(this.iframe);
 };
 
-
-ShelbyPlayer.prototype._postMessage = function(){
-
+ShelbyPlayer.prototype._postMessage = function(message){
+  return this.iframe.contentWindow.postMessage(message, this.rootUri);
 };
 
 /*
@@ -33,7 +38,7 @@ ShelbyPlayer.prototype._postMessage = function(){
 
 ShelbyPlayer.prototype.playBroadcast = function(channelId, broadcastId){
   var self = this;
-  var newSrc = this.rootUri+'/#!/channels/'+channelId+'/broadcasts/'+broadcastId+'?iframe=1';
+  var newSrc = this.rootUri+'#!/channels/'+channelId+'/broadcasts/'+broadcastId+'?iframe=1';
   if (this.renderOptions){
     Object.keys(this.renderOptions).forEach(function(k){
       if (self.validRenderOptions.indexOf(k)!==-1){
@@ -50,6 +55,5 @@ ShelbyPlayer.prototype.togglePlayback = function(state){
 };
 
 ShelbyPlayer.prototype.toggleMute = function(){
-
 };
 

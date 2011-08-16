@@ -17,16 +17,27 @@
       shade:'#191919'
     };
 
-    var myStateChangeFunc = function(property, newVal, playerState){
-      //do stuff when a state change happens
+    var myReadyFunc = function(){
+      // Posting a message to the iFrame
+      console.log('-----PLAYER IS READY---------');
+      player._postMessage('HELLO FROM UNIPLAYER');
     };
 
-    var player = new ShelbyPlayer('#player-div', myStateChangeFunc, renderOptions); 
+    var myStateChangeFunc = function(data){
+      data = JSON.parse(data);
+      for (var i in data){
+       console.log(i, data[i]); 
+      }
+    };
+
+    var player = new ShelbyPlayer('#player-div', myReadyFunc, myStateChangeFunc, renderOptions); 
 
     // Play a broadcast by passing channelId and broadcastId 
     var res = player.playBroadcast('4d9390098ebcf62f7e000009', '4d9390138ebcf670c00006ca');
 
-/* Changing the broadcast after 8 seconds....
+
+  /*****TESTS*****/
+ /* Changing the broadcast after 8 seconds....
     setTimeout(function(){
       player.playBroadcast('4d9390098ebcf62f7e000009', '4d9390128ebcf670c00006b2');
     }, 8000);
