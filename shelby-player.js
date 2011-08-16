@@ -6,18 +6,22 @@
 /*
  * ShelbyPlayer constructor
  * @param containerDiv : string : the jQuery selector string of the player's containing div
- * @param rootUri : string : the root URI of the shely app to iFrame, e.g. 'http://alpha.shelby.tv'
- * @param channelId : string : the channel id of the broadcast to begin playing with
- * @param broadcastId : string : the broadcast id of the broadcast to begin playing with
+ * @param onStateChange : function : (optional) the function to execute when any player state changes 
+ * @param renderOptions : object : (optional) a map of rendering options for the player 
  */
 
-var ShelbyPlayer = function(containerDiv, rootUri, channelId, broadcastId){
-  this.rootUri = rootUri;
+var ShelbyPlayer = function(containerDiv, onStateChange, renderOptions){
+  this.validRenderOptions = ['sidebar', 'shade'];
+  this.rootUri = 'http://localhost:3000';
   this.iframe = $('<iframe id="shelby-iframe" style="width:100%;height:100%"></iframe>')[0];
+  this.onStateChange = onStateChange;
+  this.renderOptions = renderOptions;
   jQuery(containerDiv).append(this.iframe);
-  if (channelId && broadcastId) {
-    this.playBroadcast(channelId, broadcastId);
-  }
+};
+
+
+ShelbyPlayer.prototype._postMessage = function(){
+
 };
 
 /*
@@ -28,5 +32,24 @@ var ShelbyPlayer = function(containerDiv, rootUri, channelId, broadcastId){
  */
 
 ShelbyPlayer.prototype.playBroadcast = function(channelId, broadcastId){
-  return this.iframe.src = this.rootUri+'/#!/channels/'+channelId+'/broadcasts/'+broadcastId;
+  var self = this;
+  var newSrc = this.rootUri+'/#!/channels/'+channelId+'/broadcasts/'+broadcastId+'?iframe=1';
+  if (this.renderOptions){
+    Object.keys(this.renderOptions).forEach(function(k){
+      if (self.validRenderOptions.indexOf(k)!==-1){
+        newSrc+='&'+k+'='+escape(self.renderOptions[k]);
+      }
+    });
+  }
+  return this.iframe.src = newSrc;
 };
+
+ShelbyPlayer.prototype.togglePlayback = function(state){
+  var newState = state ? state : (!playerState);
+  postMessage('property', newState);
+};
+
+ShelbyPlayer.prototype.toggleMute = function(){
+
+};
+
