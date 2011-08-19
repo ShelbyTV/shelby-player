@@ -10,22 +10,29 @@
  * @param renderOptions : object : (optional) a map of rendering options for the player 
  */
 
-var ShelbyPlayer = function(containerDiv, onReady, onStateChange, renderOptions){
-  this.validRenderOptions = ['sidebar', 'shade'];
+var ShelbyPlayer = function(options, onStateChange){
+  this.options = options;
+  this.validOptions = ['container', 'sidebar', 'shade'];
   this.rootUri = 'http://localhost:3000/';
-  this.iframe = $('<iframe id="shelby-iframe" style="width:100%;height:100%"></iframe>')[0];
+  this.iframe = $('<iframe id="'+options.container+'-iframe" style="width:100%;height:100%"></iframe>')[0];
+  jQuery('#'+options.container).append(this.iframe);
   window.addEventListener("message", function(event){
     data = JSON.parse(event.data);
-    if (data.loaded) {
-      onReady();
+    if (data.id === options.container){
+      if(data.playerLoaded){
+        this.playerLoaded = data.msg.playerLoaded;
+      }
+      onStateChange(data);
     }
-    onStateChange(event.data);
   }, false);
-  this.renderOptions = renderOptions;
-  jQuery(containerDiv).append(this.iframe);
 };
 
+ShelbyPlayer.prototype.isPlayerLoaded = function(){
+  return this.playerLoaded;
+}
+
 ShelbyPlayer.prototype._postMessage = function(message){
+//  message = JSON.stringify({id:this.containerDiv, msg:message});
   return this.iframe.contentWindow.postMessage(message, this.rootUri);
 };
 
@@ -38,22 +45,23 @@ ShelbyPlayer.prototype._postMessage = function(message){
 
 ShelbyPlayer.prototype.playBroadcast = function(channelId, broadcastId){
   var self = this;
-  var newSrc = this.rootUri+'#!/channels/'+channelId+'/broadcasts/'+broadcastId+'?iframe=1';
-  if (this.renderOptions){
-    Object.keys(this.renderOptions).forEach(function(k){
-      if (self.validRenderOptions.indexOf(k)!==-1){
-        newSrc+='&'+k+'='+escape(self.renderOptions[k]);
+  var newSrc = this.rootUri+'#!/channels/'+channelId+'/broadcasts/'+broadcastId+'/iframe/';
+  if (this.options){
+    Object.keys(this.options).forEach(function(k){
+      if (self.validOptions.indexOf(k)===-1){
+        delete this.options[k]
       }
     });
+    newSrc+=escape(JSON.stringify(this.options));
   }
   return this.iframe.src = newSrc;
 };
 
-ShelbyPlayer.prototype.togglePlayback = function(state){
-  var newState = state ? state : (!playerState);
-  postMessage('property', newState);
+ShelbyPlayer.prototype.togglePlay = function(){
+ this._postMessage('iframe:toggleplay'); 
 };
 
 ShelbyPlayer.prototype.toggleMute = function(){
+ this._postMessage('iframe:togglemute'); 
 };
 

@@ -4,7 +4,8 @@
 <script type='text/javascript' src='shelby-player.js'></script>
 
 <!-- Here's where your shelby player will be -->
-<div id="player-div" style="width:900px;height:500px"></div>
+<div id="player-div" style="position:relavitve;float:left;width:1000px;height:500px"></div>
+<div id="player-div-2" style="position:relavitve;float:left;width:600px;height:500px"></div>
 
 <script type='text/javascript'>
   jQuery(document).ready(function(){
@@ -12,36 +13,41 @@
     // Instantiate a ShelbyPlayer and pass in the selector string of the containing div element
     // and the root uri of the shelby app you want to iFrame (this will default to alpha.shelby.tv)
 
-    var renderOptions = {
+    var options = {
+      container:'player-div',
+      sidebar:true,
+      shade:'yellow'
+    };
+    var options2 = {
+      container:'player-div-2',
       sidebar:true,
       shade:'#191919'
     };
 
-    var myReadyFunc = function(){
-      // Posting a message to the iFrame
-      console.log('-----PLAYER IS READY---------');
-      player._postMessage('HELLO FROM UNIPLAYER');
-    };
-
     var myStateChangeFunc = function(data){
-      data = JSON.parse(data);
-      for (var i in data){
-       console.log(i, data[i]); 
+
+      if (data.playerLoaded){
+        setInterval(function(){
+          player.toggleMute();
+        }, 1000);
       }
+
+      /*for (var i in data) {
+        console.log(i, data[i]);
+      }*/
     };
 
-    var player = new ShelbyPlayer('#player-div', myReadyFunc, myStateChangeFunc, renderOptions); 
-
-    // Play a broadcast by passing channelId and broadcastId 
-    var res = player.playBroadcast('4d9390098ebcf62f7e000009', '4d9390138ebcf670c00006ca');
-
+    var player = new ShelbyPlayer(options, myStateChangeFunc);
+    player.playBroadcast('4d9390098ebcf62f7e000009', '4d9390138ebcf670c00006ca');
+    //var player2 = new ShelbyPlayer(options2, myStateChangeFunc);
+    //player2.playBroadcast('4d9390098ebcf62f7e000009', '4d93900e8ebcf670c0000649');
 
   /*****TESTS*****/
- /* Changing the broadcast after 8 seconds....
-    setTimeout(function(){
-      player.playBroadcast('4d9390098ebcf62f7e000009', '4d9390128ebcf670c00006b2');
-    }, 8000);
-*/
+  //Changing the broadcast after 8 seconds....
+    /*setTimeout(function(){
+      player.playBroadcast('4d9390098ebcf62f7e000009', '4d93900e8ebcf670c0000649');
+    }, 8000);*/
+
 
   });
 </script>
