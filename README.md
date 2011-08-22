@@ -50,7 +50,7 @@ Now instantiate a uniplayer, passing an options object (specifying the id of you
 Play broadcasts by passing in the channel id and broadcast id
 
 ``` js
-	player.playBroadcast('4d9390098ebcf62f7e000009', '4d9390138ebcf670c00006ca');
+	player.playBroadcast(channelId, broadcastId);
 ```
 
 You can also programmatically control playback 
