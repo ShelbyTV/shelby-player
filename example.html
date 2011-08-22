@@ -5,7 +5,7 @@
 
 <!-- Here's where your shelby player will be -->
 <div id="player-div" style="position:relavitve;float:left;width:1000px;height:500px"></div>
-<div id="player-div-2" style="position:relavitve;float:left;width:600px;height:500px"></div>
+<!--<div id="player-div-2" style="position:relavitve;float:left;width:600px;height:500px"></div>-->
 
 <script type='text/javascript'>
   jQuery(document).ready(function(){
@@ -15,39 +15,19 @@
 
     var options = {
       container:'player-div',
-      sidebar:true,
-      shade:'yellow'
-    };
-    var options2 = {
-      container:'player-div-2',
-      sidebar:true,
-      shade:'#191919'
+      sidebar:false
     };
 
-    var myStateChangeFunc = function(data){
-
-      if (data.playerLoaded){
-        setInterval(function(){
-          player.toggleMute();
-        }, 1000);
+    var myStateChangeFunc = function(data, player){
+      Object.keys(data.state).forEach(function(k){
+        console.log(k, data.state[k]);
+      });
+      if (data.state.playerLoaded){
+        
       }
-
-      /*for (var i in data) {
-        console.log(i, data[i]);
-      }*/
     };
 
     var player = new ShelbyPlayer(options, myStateChangeFunc);
     player.playBroadcast('4d9390098ebcf62f7e000009', '4d9390138ebcf670c00006ca');
-    //var player2 = new ShelbyPlayer(options2, myStateChangeFunc);
-    //player2.playBroadcast('4d9390098ebcf62f7e000009', '4d93900e8ebcf670c0000649');
-
-  /*****TESTS*****/
-  //Changing the broadcast after 8 seconds....
-    /*setTimeout(function(){
-      player.playBroadcast('4d9390098ebcf62f7e000009', '4d93900e8ebcf670c0000649');
-    }, 8000);*/
-
-
   });
 </script>
