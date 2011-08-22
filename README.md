@@ -1,6 +1,6 @@
 # Shelby Universal Player
 
-One player to rule the all
+One player to rule them all
 
 ## Usage
 You need to include jquery and the uniplayer in your client-side code.
