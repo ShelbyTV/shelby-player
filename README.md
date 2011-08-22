@@ -19,15 +19,45 @@ Create a DOM element in which to house your uniplayer.
 	<div id="player-div" style="position:relavitve;float:left;width:1000px;height:500px"></div>
 ```
 
-Now instantiate a uniplayer, passing the id of your DOM container, and an onStateChange callback.
+Now instantiate a uniplayer, passing an options object (specifying the id of your DOM container), and an onStateChange callback. The onStateChange callback gets called every time something changes in the player.
 
 ``` js
-	var myStateChangeFunc = function(data, player){
-	  //respond to state changes      
+	var options = {
+	      container:'player-div',
+	      sidebar:false
+	};
+	
+	var myStateChangeFunc = function(data, player){      
+		if (data.state.playerLoaded){
+			
+		}
+		if (data.state.buffering){
+			
+		}
+		if (data.state.playing){
+			
+		}
+		if (data.state.videoEnded){
+		}
+		if (data.state.muted){
+			
+		}
 	};
 
 	var player = new ShelbyPlayer(options, myStateChangeFunc);
-  player.playBroadcast('4d9390098ebcf62f7e000009', '4d9390138ebcf670c00006ca');
+```
+
+Play broadcasts by passing in then channel id and broadcast id
+
+``` js
+	player.playBroadcast('4d9390098ebcf62f7e000009', '4d9390138ebcf670c00006ca');
+```
+
+You can also programmatically control playback 
+
+``` js
+	player.togglePlay(); // play/pause video
+	player.toggleMute(); // mute/unmute video
 ```
 
 #### Authors: [Myles Recny](http://www.github.com/mkrecny), [Henry Sztul](http://www.github.com/hsztul)
