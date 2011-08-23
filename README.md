@@ -1,6 +1,9 @@
 # Shelby Universal Player
 
-One player to rule them all
+--there can be only one--
+
+Hello there! The Shelby Player is a javascript video player that plays any video that Shelby.tv supports which currently is: youtube, vimeo, college humor, blip.tv, hulu and techcrunch.
+We provide one consistent set of api calls to control any of these players.
 
 ## Usage
 You need to include jquery and the uniplayer in your client-side code.
