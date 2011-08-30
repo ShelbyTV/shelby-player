@@ -14,7 +14,7 @@ var ShelbyPlayer = function(options, onStateChange){
   var self = this;
   this.options = options;
   this.validOptions = ['container', 'sidebar', 'shade'];
-  this.rootUri = 'http://localhost:3000/';
+  this.rootUri = 'http://alpha.shelby.tv/';
   this.iframe = $('<iframe id="'+options.container+'-iframe" style="width:100%;height:100%"></iframe>')[0];
   jQuery('#'+options.container).append(this.iframe);
   // this.iframe message handler
